@@ -1,0 +1,54 @@
+.upload-example-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.upload-example-container h1 {
+  text-align: center;
+  color: #111827;
+  margin-bottom: 40px;
+  font-size: 32px;
+}
+
+.example-section {
+  margin-bottom: 60px;
+  padding: 30px;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+
+.example-section h2 {
+  color: #2563eb;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.example-section p {
+  color: #6b7280;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.uploaded-data {
+  margin-top: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.uploaded-data h3 {
+  color: #111827;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.uploaded-data pre {
+  background: #f3f4f6;
+  padding: 15px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 12px;
+  color: #374151;
+}
