@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "656712268788",
+    "firebase_url": "https://parivartan-445b5-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "parivartan-445b5",
+    "storage_bucket": "parivartan-445b5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:656712268788:android:19ffd6350b8be6fe6d17a1",
+        "android_client_info": {
+          "package_name": "com.parivartan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "656712268788-lup21roadq9cl1sl5nq74l62br1d2vl2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCu5t8PVaxxIIRgs4EXc93nrn9ELr1THHQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "656712268788-lup21roadq9cl1sl5nq74l62br1d2vl2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

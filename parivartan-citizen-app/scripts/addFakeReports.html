@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Fake Reports to Firebase</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      margin: 10px 0;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    #status {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 5px;
+      display: none;
+    }
+    .success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+    .log {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 5px;
+      max-height: 400px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 12px;
+    }
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+    }
+    .log-success {
+      color: #28a745;
+    }
+    .log-error {
+      color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚀 Add Fake Reports to Firebase</h1>
+    <p style="text-align: center; color: #666;">
+      This will add <strong>12 sample grievance reports</strong> around <strong>Chandigarh area (30.77°N, 76.57°E)</strong> to your Firebase database.
+    </p>
+    
+    <div id="auth-section">
+      <p style="color: #666;">Please sign in first to add reports:</p>
+      <button id="loginBtn" onclick="signIn()">Sign In with Email</button>
+    </div>
+
+    <div id="add-section" style="display: none;">
+      <p style="color: #666;">You are signed in. Ready to add reports!</p>
+      <button id="addBtn" onclick="addReports()">Add 10 Fake Reports</button>
+    </div>
+    
+    <div id="status"></div>
+    <div id="log" class="log" style="display: none;"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+    import { getFirestore, collection, addDoc, Timestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCXjKyjjpIzfViaPwqNaFm8h6d_Oqs4ybY",
+      authDomain: "parivartan-12.firebaseapp.com",
+      projectId: "parivartan-12",
+      storageBucket: "parivartan-12.firebasestorage.app",
+      messagingSenderId: "779445083679",
+      appId: "1:779445083679:web:9ad7ea10183628beb4bf2a",
+      measurementId: "G-J1E4JKGFG5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const fakeReports = [
+      {
+        title: "Pothole on Main Road",
+        description: "Large pothole causing traffic issues. Needs immediate attention as vehicles are getting damaged.",
+        category: "Roads",
+        department: "PWD",
+        status: "pending",
+        priority: "high",
+        location: {
+          latitude: 30.7730,
+          longitude: 76.5710,
+          address: "Sector 17, Chandigarh",
+          district: "Chandigarh"
+        },
+        upvotes: 15,
+        citizenName: "Rajesh Kumar",
+        citizenEmail: "rajesh.k@example.com",
+        citizenPhone: "+91-9876543210"
+      },
+      {
+        title: "Broken Streetlight Near Park",
+        description: "Streetlight not working for past 2 weeks. Area becomes very dark at night creating safety concerns.",
+        category: "Infrastructure",
+        department: "Electricity",
+        status: "in-progress",
+        priority: "medium",
+        location: {
+          latitude: 30.7720,
+          longitude: 76.5715,
+          address: "Sector 22, Chandigarh",
+          district: "Chandigarh"
+        },
+        upvotes: 8,
+        citizenName: "Priya Sharma",
+        citizenEmail: "priya.s@example.com",
+        citizenPhone: "+91-9876543211"
+      },
+      {
+        title: "Garbage Not Collected",
+        description: "Accumulated garbage bins not picked up for 3 days. Causing health hazards and bad smell in the area.",
+        category: "Sanitation",
+        department: "Sanitation",
+        status: "pending",
+        priority: "high",
+        location: {
+          latitude: 30.7740,
+          longitude: 76.5720,
+          address: "Sector 35, Chandigarh",
+          district: "Chandigarh"
+        },
+        upvotes: 23,
+        citizenName: "Amit Singh",
+        citizenEmail: "amit.singh@example.com",
+        citizenPhone: "+91-9876543212"
+      },
+      {
+        title: "Park Bench Vandalized",
+        description: "Public park benches have been vandalized with graffiti. Wood is broken and paint is scratched.",
+        category: "Vandalism",
+        department: "Horticulture",
+        status: "pending",
+        priority: "low",
+        location: {
+          latitude: 30.7750,
+          longitude: 76.5705,
+          address: "Rose Garden, Sector 16, Chandigarh",
+          district: "Chandigarh"
+        },
+        upvotes: 5,
+        citizenName: "Neha Gupta",
+        citizenEmail: "neha.g@example.com",
+        citizenPhone: "+91-9876543213"
+      },
+      {
+        title: "Waterlogging After Rain",
+        description: "Road gets severely flooded during rain. Drainage system completely blocked and needs urgent repair.",
+        category: "Infrastructure",
+        department: "Drainage",
+        status: "pending",
+        priority: "high",
+        location: {
+          latitude: 30.7760,
+          longitude: 76.5730,
+          address: "Sector 43, Chandigarh",
+          district: "Chandigarh"
+        },
+        upvotes: 18,
+        citizenName: "Harpreet Kaur",
+        citizenEmail: "harpreet.k@example.com",
+        citizenPhone: "+91-9876543214"
+      },
+      {
+        title: "Illegal Construction Debris",
+        description: "People are dumping construction waste illegally on roadside. Creating environmental hazard and blocking path.",
+        category: "Sanitation",
+        department: "Environment",
+        status: "pending",
+        priority: "medium",
+        location: {
+          latitude: 30.7770,
+          longitude: 76.5700,
+          address: "Sector 18, Chandigarh",
+          district: "Chandigarh"
+        },
+        upvotes: 12,
+        citizenName: "Sukhwinder Singh",
+        citizenEmail: "sukh.s@example.com",
+        citizenPhone: "+91-9876543215"
+      },
+      {
+        title: "Traffic Signal Malfunction",
+        description: "Traffic signal at major intersection is not working properly. High accident risk during peak hours.",
+        category: "Infrastructure",
+        department: "Traffic Police",
+        status: "in-progress",
+        priority: "high",
+        location: {
+          latitude: 30.7710,
+          longitude: 76.5725,
+          address: "Sector 9 Market, Chandigarh",
+          district: "Chandigarh"
+        },
+        upvotes: 31,
+        citizenName: "Manjeet Kaur",
+        citizenEmail: "manjeet.k@example.com",
+        citizenPhone: "+91-9876543216"
+      },
+      {
+        title: "Wall Graffiti Defacement",
+        description: "Offensive graffiti on public property wall. Needs immediate cleaning and painting.",
+        category: "Vandalism",
+        department: "Municipal Corporation",
+        status: "pending",
+        priority: "medium",
+        location: {
+          latitude: 30.7780,
+          longitude: 76.5735,
+          address: "Sector 26, Chandigarh",
+          district: "Chandigarh"
+        },
+        upvotes: 7,
+        citizenName: "Rahul Verma",
+        citizenEmail: "rahul.v@example.com",
+        citizenPhone: "+91-9876543217"
+      },
+      {
+        title: "Overgrown Trees Blocking Visibility",
+        description: "Tree branches hanging low over the road. Blocking visibility and street signs for vehicles.",
+        category: "Parks",
+        department: "Horticulture",
+        status: "pending",
+        priority: "medium",
+        location: {
+          latitude: 30.7790,
+          longitude: 76.5695,
+          address: "Sector 10, Chandigarh",
+          district: "Chandigarh"
+        },
+        upvotes: 9,
+        citizenName: "Simran Kaur",
+        citizenEmail: "simran.k@example.com",
+        citizenPhone: "+91-9876543218"
+      },
+      {
+        title: "Water Pipeline Leakage",
+        description: "Water pipeline leaking continuously for 2 days. Causing water wastage and road damage.",
+        category: "Infrastructure",
+        department: "Water Supply",
+        status: "resolved",
+        priority: "high",
+        location: {
+          latitude: 30.7700,
+          longitude: 76.5740,
+          address: "Sector 11, Chandigarh",
+          district: "Chandigarh"
+        },
+        upvotes: 25,
+        citizenName: "Deepak Kumar",
+        citizenEmail: "deepak.k@example.com",
+        citizenPhone: "+91-9876543219"
+      },
+      {
+        title: "Stray Dogs Menace",
+        description: "Pack of stray dogs causing problems in residential area. Attacking pedestrians and creating nuisance.",
+        category: "Sanitation",
+        department: "Animal Control",
+        status: "pending",
+        priority: "high",
+        location: {
+          latitude: 30.7725,
+          longitude: 76.5712,
+          address: "Sector 20, Chandigarh",
+          district: "Chandigarh"
+        },
+        upvotes: 19,
+        citizenName: "Kavita Mehta",
+        citizenEmail: "kavita.m@example.com",
+        citizenPhone: "+91-9876543220"
+      },
+      {
+        title: "Broken Footpath Tiles",
+        description: "Multiple tiles on footpath are broken creating tripping hazard. Senior citizens and children at risk.",
+        category: "Infrastructure",
+        department: "PWD",
+        status: "pending",
+        priority: "medium",
+        location: {
+          latitude: 30.7735,
+          longitude: 76.5718,
+          address: "Sector 15, Chandigarh",
+          district: "Chandigarh"
+        },
+        upvotes: 11,
+        citizenName: "Arun Sharma",
+        citizenEmail: "arun.s@example.com",
+        citizenPhone: "+91-9876543221"
+      }
+    ];
+
+    function showStatus(message, type) {
+      const status = document.getElementById('status');
+      status.textContent = message;
+      status.className = type;
+      status.style.display = 'block';
+    }
+
+    function addLog(message, isError = false) {
+      const log = document.getElementById('log');
+      log.style.display = 'block';
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${isError ? 'log-error' : 'log-success'}`;
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      log.appendChild(entry);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    window.signIn = async function() {
+      const email = prompt('Enter your email:', 'rajathclans12@gmail.com');
+      const password = prompt('Enter your password:');
+      
+      if (!email || !password) {
+        showStatus('Sign in cancelled', 'error');
+        return;
+      }
+
+      try {
+        showStatus('Signing in...', 'info');
+        await signInWithEmailAndPassword(auth, email, password);
+        showStatus('Signed in successfully!', 'success');
+      } catch (error) {
+        showStatus(`Sign in failed: ${error.message}`, 'error');
+        addLog(`Sign in failed: ${error.message}`, true);
+      }
+    };
+
+    window.addReports = async function() {
+      const btn = document.getElementById('addBtn');
+      btn.disabled = true;
+      btn.textContent = 'Adding reports...';
+      showStatus('Starting to add fake reports...', 'info');
+      addLog('Starting to add fake reports...');
+
+      try {
+        const user = auth.currentUser;
+        if (!user) {
+          throw new Error('Not authenticated');
+        }
+
+        for (let i = 0; i < fakeReports.length; i++) {
+          const report = fakeReports[i];
+          
+          const reportData = {
+            ...report,
+            createdAt: Timestamp.now(),
+            updatedAt: Timestamp.now(),
+            submittedDate: new Date().toISOString(),
+            imageUrl: null,
+            comments: [],
+            createdBy: {
+              uid: user.uid,
+              displayName: user.displayName || report.citizenName,
+              email: user.email || report.citizenEmail,
+              photoURL: user.photoURL || null
+            }
+          };
+          
+          const docRef = await addDoc(collection(db, 'grievances'), reportData);
+          addLog(`✓ Added report ${i + 1}/${fakeReports.length}: "${report.title}" (ID: ${docRef.id})`);
+          showStatus(`Added ${i + 1}/${fakeReports.length} reports...`, 'info');
+        }
+        
+        showStatus(`✅ Successfully added all ${fakeReports.length} fake reports!`, 'success');
+        addLog(`✅ Successfully added all ${fakeReports.length} fake reports!`);
+        btn.textContent = '✅ Reports Added Successfully';
+        
+      } catch (error) {
+        showStatus(`❌ Error: ${error.message}`, 'error');
+        addLog(`❌ Error: ${error.message}`, true);
+        btn.disabled = false;
+        btn.textContent = 'Try Again';
+      }
+    };
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById('auth-section').style.display = 'none';
+        document.getElementById('add-section').style.display = 'block';
+        addLog(`Signed in as: ${user.email}`);
+      } else {
+        document.getElementById('auth-section').style.display = 'block';
+        document.getElementById('add-section').style.display = 'none';
+      }
+    });
+
+    window.auth = auth;
+    window.db = db;
+  </script>
+</body>
+</html>
