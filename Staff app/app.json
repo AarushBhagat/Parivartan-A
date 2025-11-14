@@ -1,0 +1,55 @@
+{
+  "expo": {
+    "name": "Civic Issue Reporter",
+    "slug": "civic-issue-reporter-staff",
+    "owner": "aarushbhagat5",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#11ad9d"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.citygovernment.civicissues",
+      "config": {
+        "googleMapsApiKey": "AIzaSyAQa3Rd6ZX-x6NnWFvhzUkFoOeUUWoYbME"
+      }
+    },
+    "android": {
+      "package": "com.citygovernment.civicissues",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAQa3Rd6ZX-x6NnWFvhzUkFoOeUUWoYbME"
+        }
+      }
+    },
+    "web": {},
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow Civic Issue Reporter to use your location to show nearby issues."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Civic Issue Reporter to access your photos to upload issue images.",
+          "cameraPermission": "Allow Civic Issue Reporter to access your camera to take photos of issues."
+        }
+      ]
+    ]
+  }
+}
