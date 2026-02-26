@@ -140,6 +140,24 @@ router.post('/', async (req, res) => {
       const docRef = await db.collection('grievances').add(grievance);
       console.log('✅ Grievance saved successfully with ID:', docRef.id);
 
+      // Forward to Pathway service for real-time enrichment (fire-and-forget)
+      if (process.env.PATHWAY_SERVICE_URL) {
+        fetch(process.env.PATHWAY_SERVICE_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title,
+            description,
+            department,
+            location_address: location.address || '',
+            location_latitude: location.latitude || 0,
+            location_longitude: location.longitude || 0,
+            citizen_name: citizenName,
+            issue_id: docRef.id
+          })
+        }).catch(() => {}); // non-blocking: ignore errors
+      }
+
       res.status(201).json({
         success: true,
         message: 'Issue reported successfully',

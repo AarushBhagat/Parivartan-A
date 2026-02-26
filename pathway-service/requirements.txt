@@ -1,0 +1,8 @@
+# Pathway real-time streaming pipeline
+pathway>=0.14.0
+
+# Firebase Admin SDK for Firestore output
+firebase-admin>=6.0.0
+
+# dotenv for loading .env files
+python-dotenv>=1.0.0
