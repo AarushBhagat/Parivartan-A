@@ -24,12 +24,12 @@ type AuthContextType = {
   userDetails: any;
   loading: boolean;
   error: string | null;
-  register: (email: string, password: string, displayName: string, phoneNumber?: string) => Promise<void>;
-  login: (email: string, password: string) => Promise<void>;
-  googleSignIn: (accessToken: string) => Promise<void>;
+  register: (email: string, password: string, displayName: string, phoneNumber?: string) => Promise<any>;
+  login: (email: string, password: string) => Promise<any>;
+  googleSignIn: (accessToken: string) => Promise<any>;
   logout: () => Promise<void>;
   clearError: () => void;
-  refreshUserDetails: () => Promise<void>;
+  refreshUserDetails: () => Promise<any>;
   // Add setter for direct updates from components
   setUser: React.Dispatch<React.SetStateAction<User>>;
 };
@@ -134,15 +134,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               const userData = response.user || response;
               
               // Convert to User type
-              const user: User = {
-                uid: userData.id,
-                email: userData.email,
-                displayName: userData.displayName,
-                photoURL: userData.photoURL,
-                role: userData.role,
-                phoneNumber: userData.phone,
+              const userObj: User = {
+                uid: (userData as any).id ?? (userData as any).uid,
+                email: (userData as any).email ?? null,
+                displayName: (userData as any).displayName ?? (userData as any).name ?? null,
+                photoURL: (userData as any).photoURL ?? null,
+                role: (userData as any).role,
+                phoneNumber: (userData as any).phone ?? (userData as any).phoneNumber ?? null,
                 emailVerified: true,
-                address: userData.address
+                address: (userData as any).address ?? null
               };
               
               setUser(user);
@@ -183,13 +183,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       // Update local state with the new user data
       const user: User = {
-        uid: userData.id || userData.uid,
-        email: userData.email,
-        displayName: userData.displayName || displayName,
-        photoURL: userData.photoURL,
+        uid: (userData as any).id ?? (userData as any).uid,
+        email: (userData as any).email ?? null,
+        displayName: (userData as any).displayName ?? displayName ?? null,
+        photoURL: (userData as any).photoURL ?? null,
         emailVerified: true, // Assume verified in mock
-        role: userData.role || 'citizen',
-        phoneNumber: userData.phone || phoneNumber
+        role: (userData as any).role ?? 'citizen',
+        phoneNumber: (userData as any).phone ?? phoneNumber ?? null
       };
       
       setUser(user);
@@ -219,13 +219,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       // Update local state with user data
       const user: User = {
-        uid: userData.id || userData.uid,
-        email: userData.email,
-        displayName: userData.displayName || userData.name,
-        photoURL: userData.photoURL,
+        uid: (userData as any).id ?? (userData as any).uid,
+        email: (userData as any).email ?? null,
+        displayName: (userData as any).displayName ?? (userData as any).name ?? null,
+        photoURL: (userData as any).photoURL ?? null,
         emailVerified: true, // Assume verified in mock
-        role: userData.role || 'citizen',
-        phoneNumber: userData.phone || userData.phoneNumber
+        role: (userData as any).role ?? 'citizen',
+        phoneNumber: (userData as any).phone ?? (userData as any).phoneNumber ?? null
       };
       
       setUser(user);
@@ -255,13 +255,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       // Update local state with user data
       const user: User = {
-        uid: userData.id || userData.uid,
-        email: userData.email,
-        displayName: userData.displayName || userData.name,
-        photoURL: userData.photoURL,
+        uid: (userData as any).id ?? (userData as any).uid,
+        email: (userData as any).email ?? null,
+        displayName: (userData as any).displayName ?? (userData as any).name ?? null,
+        photoURL: (userData as any).photoURL ?? null,
         emailVerified: true, // Always true for Google sign-in
-        role: userData.role || 'citizen',
-        phoneNumber: userData.phone || userData.phoneNumber
+        role: (userData as any).role ?? 'citizen',
+        phoneNumber: (userData as any).phone ?? (userData as any).phoneNumber ?? null
       };
       
       setUser(user);

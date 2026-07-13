@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "scheme": "parivartan",
-    "owner": "harshraj001",
+    "owner": "aarushbhagat5",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -48,11 +48,14 @@
     },
     "extra": {
       "eas": {
-        "projectId": "e7e25c16-1510-4dde-b73b-9cc4ccb67a3e"
+        "projectId": "508bde66-b595-490d-b2c6-70203086cf66"
       }
     },
     "oauth": {
       "redirectUrl": "parivartan://oauth"
-    }
+    },
+    "plugins": [
+      "expo-web-browser"
+    ]
   }
 }

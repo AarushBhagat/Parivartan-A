@@ -102,7 +102,7 @@ export const uploadSinglePhotoToS3 = async (
 
     console.log('✅ Photo uploaded successfully to AWS S3');
     console.log('Uploaded file:', result.file);
-r
+
     return result;
   } catch (error) {
     console.error('Error uploading photo to S3:', error);
