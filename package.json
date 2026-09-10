@@ -21,7 +21,7 @@
     "firebase": "^10.7.1",
     "firebase-admin": "^12.0.0",
     "jsonwebtoken": "^9.0.2",
-    "multer": "^2.0.2",
+    "multer": "^2.3.0",
     "multer-s3": "^2.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
